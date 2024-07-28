@@ -19,5 +19,6 @@ int main()
     printf("%d\n", *(q + 1));
 
     int *p;
-    printf("p: %zu\n", sizeof(*p));
+    printf("p指针指向的变量类型字节长度: %zu\n", sizeof(*p));
+    printf("p指针类型字节长度: %zu\n", sizeof(p));
 }
