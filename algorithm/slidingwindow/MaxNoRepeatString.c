@@ -16,6 +16,12 @@
 
 int main()
 {
+    int brr[1] = {5};
+    for (int right = 0; right < 5; right++)
+    {
+        brr[0]--;
+        printf("%d\n", brr[0]);
+    }
     char a = 'a';
     char z = 'z';
     char A = 'A';
@@ -25,8 +31,8 @@ int main()
     printf("A:%d\n", A);
     printf("Z:%d\n", Z);
 
-    // char s[] = "abcabcbb";
-    char s[] = "pwwkew";
+    char s[] = "abcabcbb";
+    // char s[] = "pwwkew";
 
     int max = 0;
     int len = strlen(s);
@@ -37,19 +43,19 @@ int main()
         return 0;
     }
 
-    int arr[256];
+    int arr[128] = {0};
     for (int left = 0, right = 0; right < len; right++)
     {
-        char c = s[right];
-        int index_r = c;
-        printf("index_r:%d\n", index_r);
-        arr[index_r]++;
-        while (arr[index_r] > 1)
+        char r = s[right];
+        // int index_r = r;
+        // printf("char:%c,index_r:%d\n", c, index_r);
+        arr[r]++;
+        while (arr[r] > 1)
         {
             // 说明存在重复的字符
-            char r = s[left];
-            int index_l = r;
-            arr[index_l]--;
+            char l = s[left];
+            // int index_l = l;
+            arr[l]--;
             left++;
         }
 
