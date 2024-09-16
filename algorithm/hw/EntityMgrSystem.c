@@ -18,23 +18,7 @@ static EntityMgrSystem *EntityMgrSystemCreate(int entityNum)
     {
         return NULL;
     }
-    // memset(sys, 0, sizeof(EntityMgrSystem) * entityNum);
-    for (int i = 0; i < entityNum; i++)
-    {
-        for (int j = 0; j < MAX_ARRAY_SIZE; j++)
-        {
-            sys[i].entityTypeArray[j] = 0;
-        }
-
-        for (int m = 0; m < MAX_ARRAY_SIZE; m++)
-        {
-            for (int n = 0; n < MAX_ARRAY_SIZE; n++)
-            {
-                sys[i].relationship[m][n] = 0;
-            }
-        }
-    }
-
+    memset(sys, 0, sizeof(EntityMgrSystem) * entityNum);
     return sys;
 }
 
@@ -76,8 +60,7 @@ static int *EntityMgrSystemQuery(EntityMgrSystem *sys, int entityId, int *return
     memset(type_count, 0, sizeof(type_count));
     for (size_t i = 0; i < MAX_ARRAY_SIZE; i++)
     {
-        int entityType = sys[entityId].entityTypeArray[i];
-        if (entityType == 1)
+        if (sys[entityId].entityTypeArray[i] == 1)
         {
             for (size_t j = 0; j < MAX_ARRAY_SIZE; j++)
             {
@@ -96,10 +79,7 @@ static int *EntityMgrSystemQuery(EntityMgrSystem *sys, int entityId, int *return
         if (type_count[i] > 0)
         {
             type_count_size++;
-            if (type_count[i] > max_count)
-            {
-                max_count = type_count[i];
-            }
+            max_count = type_count[i] > max_count ? type_count[i] : max_count;
         }
     }
 
@@ -118,13 +98,11 @@ static int *EntityMgrSystemQuery(EntityMgrSystem *sys, int entityId, int *return
     }
 
     *returnSize = type_count_size;
-
     return result;
 }
 
 int main()
 {
-
     EntityMgrSystem *sys = EntityMgrSystemCreate(10);
     bool result = EntityMgrSystemAddEntityType(sys, 4, 100);
     printf("4, 100:%d\n", result);
