@@ -55,6 +55,9 @@ static char *getMaxOccuredSubstring(const char *inputStr)
         if (!isFound)
         {
             strcpy(str_count[index].str, subStr);
+            // str_count[index].str[0] = subStr[0];
+            // str_count[index].str[1] = subStr[1];
+            // str_count[index].str[2] = subStr[2];
             str_count[index].count = 1;
             index++;
         }
@@ -75,7 +78,7 @@ static char *getMaxOccuredSubstring(const char *inputStr)
     printf("maxCount:%d\n", maxCount);
 
     int count_i = 0;
-    int maxOccuredStrLen = count * 4 + count;
+    int maxOccuredStrLen = count * 3 + count;
     char *maxOccuredStr = (char *)malloc(maxOccuredStrLen);
     memset(maxOccuredStr, 0, maxOccuredStrLen);
     for (int i = 0; i < ARRAY_LEN; i++)
