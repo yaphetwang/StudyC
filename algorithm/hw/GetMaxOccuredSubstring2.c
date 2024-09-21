@@ -3,16 +3,30 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define ARRAY_LEN 1000
+#define SUBSTR_LEN 3
 typedef struct
 {
     char str[3];
     int count;
 } StrCount;
 
+int cmp(const char *a, const char *b)
+{
+    for (int i = 0; i < SUBSTR_LEN; i++)
+    {
+        if (a[i] != b[i])
+        {
+            return -1;
+        }
+    }
+    return 0;
+}
+
 static char *getMaxOccuredSubstring(const char *inputStr)
 {
-    StrCount str_count[1000];
-    memset(str_count, 0, sizeof(StrCount) * 1000);
+    StrCount *str_count = (StrCount *)malloc(sizeof(StrCount) * ARRAY_LEN);
+    memset(str_count, 0, sizeof(StrCount) * ARRAY_LEN);
     int len = strlen(inputStr);
 
     int index = 0;
@@ -24,18 +38,15 @@ static char *getMaxOccuredSubstring(const char *inputStr)
         char subStr[3];
         // 截取子串
         strncpy(subStr, inputStr + left, 3);
-        printf("%s\n", subStr);
+        printf("subStr:%s\n", subStr);
 
         bool isFound = false;
-        for (size_t i = 0; i < 1000; i++)
+        for (int i = 0; i < ARRAY_LEN; i++)
         {
-            if (strcmp(subStr, str_count[i].str) == 0)
+            if (cmp(subStr, str_count[i].str) == 0)
             {
                 str_count[i].count++;
-                if (str_count[i].count > maxCount)
-                {
-                    maxCount = str_count[i].count;
-                }
+                maxCount = str_count[i].count > maxCount ? str_count[i].count : maxCount;
                 isFound = true;
                 break;
             }
@@ -43,17 +54,17 @@ static char *getMaxOccuredSubstring(const char *inputStr)
 
         if (!isFound)
         {
-            str_count[index].str = subStr;
+            strcpy(str_count[index].str, subStr);
             str_count[index].count = 1;
+            index++;
         }
 
-        index++;
         left++;
         right++;
     }
 
     int count = 0;
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < ARRAY_LEN; i++)
     {
         if (maxCount == str_count[i].count)
         {
@@ -66,7 +77,8 @@ static char *getMaxOccuredSubstring(const char *inputStr)
     int count_i = 0;
     int maxOccuredStrLen = count * 4 + count;
     char *maxOccuredStr = (char *)malloc(maxOccuredStrLen);
-    for (int i = 0; i < 1000; i++)
+    memset(maxOccuredStr, 0, maxOccuredStrLen);
+    for (int i = 0; i < ARRAY_LEN; i++)
     {
         if (maxCount == str_count[i].count)
         {
