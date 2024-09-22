@@ -65,6 +65,65 @@ int maxZeroOne(char *str)
     return res;
 }
 
+/*
+给定一个字符串,仅有数字，空格或-组成
+1.删除所有的空格和-
+2.数字从左到右3个一组，直到无剩余，剩余2个或4个数字（不允许剩余1个）
+3，剩余2个无需再分组，剩余4个则需从左到右2个一组
+*/
+char *formatStr(char *str)
+{
+    int len = strlen(str);
+    char *res = (char *)malloc(len + 1);
+    memset(res, 0, len + 1);
+
+    char temp[len];
+    int index = 0;
+    for (int i = 0; i < len; i++)
+    {
+        if (str[i] != ' ' && str[i] != '-')
+        {
+            temp[index++] = str[i];
+        }
+    }
+
+    int cycle = 0;
+    int group = index / 3;
+    int remain = index % 3;
+
+    cycle = remain == 1 ? (group - 1) : group;
+
+    int j = 0;
+    for (int i = 0; i < cycle; i++)
+    {
+        res[j++] = temp[i * 3];
+        res[j++] = temp[i * 3 + 1];
+        res[j++] = temp[i * 3 + 2];
+        if (i < cycle - 1)
+        {
+            res[j++] = '-';
+        }
+    }
+
+    if (remain == 2)
+    {
+        res[j++] = '-';
+        res[j++] = temp[cycle * 3];
+        res[j++] = temp[cycle * 3 + 1];
+    }
+    else if (remain == 1)
+    {
+        res[j++] = '-';
+        res[j++] = temp[cycle * 3];
+        res[j++] = temp[cycle * 3 + 1];
+        res[j++] = '-';
+        res[j++] = temp[cycle * 3 + 2];
+        res[j++] = temp[cycle * 3 + 3];
+    }
+
+    return res;
+}
+
 int main()
 {
     char timeStr[] = "1?:?4";
@@ -74,6 +133,11 @@ int main()
     char zerooneStr[] = "100010";
     int len = maxZeroOne(zerooneStr);
     printf("maxZeroOne:%d\n", len);
+
+    // char str[] = "-9- 3-86 3 6";
+    char str[] = "759 4-8 5 -6";
+    char *formatRes = formatStr(str);
+    printf("res:%s\n", formatRes);
 
     return 0;
 }
