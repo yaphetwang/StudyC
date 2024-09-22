@@ -26,10 +26,7 @@ static char *getMaxOccuredSubstring(const char *inputStr)
 
         int str_index = atoi(subStr);
         str_conut[str_index]++;
-        if (str_conut[str_index] > maxCount)
-        {
-            maxCount = str_conut[str_index];
-        }
+        maxCount = str_conut[str_index] > maxCount ? str_conut[str_index] : maxCount;
 
         left++;
         right++;
@@ -49,6 +46,7 @@ static char *getMaxOccuredSubstring(const char *inputStr)
     int count_i = 0;
     int maxOccuredStrLen = count * 4 + count;
     char *maxOccuredStr = (char *)malloc(maxOccuredStrLen);
+    memset(maxOccuredStr, 0, maxOccuredStrLen);
     for (int i = 0; i < 1000; i++)
     {
         if (maxCount == str_conut[i])
@@ -59,10 +57,7 @@ static char *getMaxOccuredSubstring(const char *inputStr)
             // itoa(i, temp, 10); 此函数不存在
             strcat(maxOccuredStr, temp);
             // strcat_s(maxOccuredStr, maxOccuredStrLen, temp);
-            if (count_i < count)
-            {
-                strcat(maxOccuredStr, ",");
-            }
+            count_i < count ? strcat(maxOccuredStr, ",") : 0;
         }
     }
 

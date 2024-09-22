@@ -88,10 +88,7 @@ static char *getMaxOccuredSubstring(const char *inputStr)
             count_i++;
             strcat(maxOccuredStr, str_count[i].str);
             // strcat_s(maxOccuredStr, maxOccuredStrLen, str_count[i].str);
-            if (count_i < count)
-            {
-                strcat(maxOccuredStr, ",");
-            }
+            count_i < count ? strcat(maxOccuredStr, ",") : 0;
         }
     }
 
