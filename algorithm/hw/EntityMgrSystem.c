@@ -64,7 +64,8 @@ static int *EntityMgrSystemQuery(EntityMgrSystem *sys, int entityId, int *return
         {
             for (size_t j = 0; j < MAX_ARRAY_SIZE; j++)
             {
-                sys[entityId].relationship[i][j] == 1 ? type_count[i]++ : false;
+                // sys[entityId].relationship[i][j] == 1 ? type_count[i]++ : 0;
+                type_count[i] += sys[entityId].relationship[i][j] == 1;
             }
         }
     }
