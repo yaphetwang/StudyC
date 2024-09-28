@@ -15,10 +15,7 @@ static int GetMaxDistance(const int *numbers, size_t numbersSize)
             int distance = abs(numbers[i] - numbers[j]);
             if (distance == 1)
             {
-                if (abs(j - i) > maxDistance)
-                {
-                    maxDistance = abs(j - i);
-                }
+                maxDistance = abs(j - i) > maxDistance ? abs(j - i) : maxDistance;
             }
         }
     }

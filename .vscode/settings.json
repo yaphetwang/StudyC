@@ -13,7 +13,8 @@
         "stdbool.h": "c",
         "stdlib.h": "c",
         "rentingroom": "c",
-        "variant": "c"
+        "variant": "c",
+        "winsock2.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
