@@ -3,31 +3,59 @@
 #include <string.h>
 #include <stdbool.h>
 #include <winsock2.h>
-#pragma comment(lib, "ws2_32.lib")
 
 #define BUF_LEN 650000
 #define MAX_N 102400
 
+// 给定一个数组，求满足两个元素相减等于给定差值的所有不同组合的个数
+// （1,3）和（3,1）是同一个组合
+
+// 穷举法，元素多的用例会超时
 int proc(int *arr, int arrLen, int diff)
 {
     int count = 0;
-    int diffArr[MAX_N] = {0};
     for (size_t i = 0; i < arrLen; i++)
     {
-        for (size_t j = i + 1; j < arrLen; j++)
+        for (size_t j = 0; j < arrLen; j++)
         {
-            if ((arr[i] - arr[j]) == diff || (arr[j] - arr[i]) == diff)
+            if (j != i && (arr[j] - arr[i]) == diff)
             {
-                // if (diffArr[arr[i]] == 0 || diffArr[arr[j]] == 0)
-                // {
-                //     count++;
-                //     diffArr[arr[i]] = 1;
-                // }
-
-                bool exist = (diffArr[arr[i]] == 0 || diffArr[arr[j]] == 0);
-                count += exist;
-                diffArr[arr[i]] = exist ? 1 : 0;
+                count++;
             }
+        }
+    }
+
+    return count;
+}
+
+// 升序排序
+int cmp(const void *a, const void *b)
+{
+    return (*(int *)a - *(int *)b);
+}
+
+int proc2(int *arr, int arrLen, int diff)
+{
+    int count = 0;
+    qsort(arr, arrLen, sizeof(int), cmp);
+
+    int l = 0, r = 0;
+    int d = abs(diff);
+    while (r < arrLen)
+    {
+        if (arr[r] - arr[l] == d)
+        {
+            count++;
+            r++;
+            l++;
+        }
+        else if (arr[r] - arr[l] < d)
+        {
+            r++;
+        }
+        else
+        {
+            l++;
         }
     }
 
@@ -38,12 +66,17 @@ int main()
 {
     int diff = 3, arrLen = 5;
     int arr[] = {1, 3, 2, 5, 4};
-    int res = proc(arr, arrLen, diff);
-    printf("%d\n", res);
+    int res = proc2(arr, arrLen, diff);
+    printf("proc:%d\n", res);
     int diff1 = -1, arrLen1 = 3;
     int arr1[] = {1, 2, 3};
-    int res1 = proc(arr1, arrLen1, diff1);
-    printf("%d\n", res1);
+    int res1 = proc2(arr1, arrLen1, diff1);
+    printf("proc:%d\n", res1);
+
+    // int res2 = proc2(arr, arrLen, diff);
+    // printf("proc1:%d\n", res2);
+    // int res3 = proc2(arr1, arrLen1, diff1);
+    // printf("proc1:%d\n", res3);
 
     // ip地址和二进制相互转换
     // 将ip地址转换为二进制
