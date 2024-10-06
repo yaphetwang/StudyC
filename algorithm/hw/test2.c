@@ -34,6 +34,7 @@ int cmp(const void *a, const void *b)
     return (*(int *)a - *(int *)b);
 }
 
+// 排序之后，滑动窗口，差值取绝对值
 int proc2(int *arr, int arrLen, int diff)
 {
     int count = 0;
