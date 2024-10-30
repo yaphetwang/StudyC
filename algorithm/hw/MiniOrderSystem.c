@@ -130,25 +130,6 @@ int cmp(const void *a, const void *b)
 
 static int OrderSystemQuery(OrderSystem *os)
 {
-    // for (size_t i = 0; i < SYSTEM_LEN; i++)
-    // {
-    //     if (os[i].customerId > 0)
-    //     {
-    //         for (size_t j = 0; j < GOODS_LEN; j++)
-    //         {
-    //             if (os[i].goods[j].good[0] != 0)
-    //             {
-    //                 for (size_t k = 0; k < GOOD_LEN; k++)
-    //                 {
-    //                     printf("%c", os[i].goods[j].good[k]);
-    //                 }
-    //                 printf(" ");
-    //             }
-    //         }
-    //         printf("\n");
-    //     }
-    // }
-
     OrderCount orderCounts[SYSTEM_LEN] = {0};
     int index = 0;
 
