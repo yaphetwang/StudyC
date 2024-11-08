@@ -1,11 +1,5 @@
-/*
- * Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
- * Description: 上机编程认证
- * Note: 缺省代码仅供参考，可自行决定使用、修改或删除
- */
 #include <stdio.h>
 #include <stdbool.h>
-#include "securec.h"
 
 // 用例足够使用
 #define BUF_LEN 64
@@ -15,8 +9,10 @@
 #define ALLOCATE 1
 
 int *memory;
+// int memory[MEMORY_LEN];
 
 int *memory_index;
+// int memory_index[MEMORY_LEN];
 
 void MemPoolInit(void)
 {
