@@ -34,7 +34,11 @@ static CodeStatsSystem *CodeStatsSystemCreate(const ProductRepos *products, size
 
     for (int i = 0; i < productsSize; i++)
     {
-        sys[i].pr = products[i];
+        sys[i].pr.productId = products[i].productId;
+        sys[i].pr.repoIdsSize = products[i].repoIdsSize;
+        // 元素repoIds是指针，需要单独分配内存
+        sys[i].pr.repoIds = (int *)malloc(sizeof(int) * products[i].repoIdsSize);
+        memcpy(sys[i].pr.repoIds, products[i].repoIds, sizeof(int) * products[i].repoIdsSize);
     }
 
     return sys;
