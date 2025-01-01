@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define MAX_WINDOW_NUM 100
+#define MAX_WINDOW_NUM 1000
 #define MAX_DISTANCE 1000
 
 typedef struct
@@ -13,7 +13,6 @@ typedef struct
     int col;
     int width;
     int height;
-    int levelId;
 } Window;
 
 typedef struct
@@ -45,7 +44,7 @@ static bool MultiWindowSysCreateWindow(MultiWindowSys *sys, int id, int row, int
     int topLevelId = sys->topLevelId;
     for (int i = 0; i < topLevelId; i++)
     {
-        if (sys->windows[i].id != 0 && sys->windows[i].id == id)
+        if (sys->windows[i].id == id)
         {
             return false;
         }
@@ -61,7 +60,6 @@ static bool MultiWindowSysCreateWindow(MultiWindowSys *sys, int id, int row, int
     sys->windows[topLevelId].col = col;
     sys->windows[topLevelId].width = width;
     sys->windows[topLevelId].height = height;
-    sys->windows[topLevelId].levelId = topLevelId;
     sys->topLevelId++;
     return true;
 }
@@ -70,12 +68,18 @@ static bool MultiWindowSysDestroyWindow(MultiWindowSys *sys, int id)
 {
     for (int i = 0; i < sys->topLevelId; i++)
     {
-        if (sys->windows[i].id != 0 && sys->windows[i].id == id)
+        if (sys->windows[i].id == id)
         {
-            memset(&sys->windows[i], 0, sizeof(Window));
+            for (int j = i; j < sys->topLevelId - 1; j++)
+            {
+                sys->windows[j] = sys->windows[j + 1];
+            }
+            sys->topLevelId--;
+
             return true;
         }
     }
+
     return false;
 }
 
@@ -89,17 +93,19 @@ static bool MultiWindowSysMoveWindow(MultiWindowSys *sys, int id, int dstRow, in
     int topLevelId = sys->topLevelId;
     for (int i = 0; i < topLevelId; i++)
     {
-        if (sys->windows[i].id != 0 && sys->windows[i].id == id)
+        if (sys->windows[i].id == id)
         {
-            sys->windows[topLevelId].id = id;
-            sys->windows[topLevelId].row = dstRow;
-            sys->windows[topLevelId].col = dstCol;
-            sys->windows[topLevelId].width = sys->windows[i].width;
-            sys->windows[topLevelId].height = sys->windows[i].height;
-            sys->windows[topLevelId].levelId = topLevelId;
-            sys->topLevelId++;
+            // Window temp = {id, dstRow, dstCol, sys->windows[i].width, sys->windows[i].height};
+            Window temp = sys->windows[i];
+            temp.row = dstRow;
+            temp.col = dstCol;
 
-            memset(&sys->windows[i], 0, sizeof(Window));
+            for (int j = i; j < sys->topLevelId - 1; j++)
+            {
+                sys->windows[j] = sys->windows[j + 1];
+            }
+
+            sys->windows[topLevelId - 1] = temp;
             return true;
         }
     }
@@ -112,21 +118,17 @@ static int MultiWindowSysDispatchClickEvent(MultiWindowSys *sys, int row, int co
     int topLevelId = sys->topLevelId;
     for (int i = topLevelId - 1; i >= 0; i--)
     {
-        if (sys->windows[i].id != 0 && sys->windows[i].row <= row && (sys->windows[i].row + sys->windows[i].height) > row 
-            && sys->windows[i].col <= col && (sys->windows[i].col + sys->windows[i].width) > col)
+        if (sys->windows[i].row <= row && (sys->windows[i].row + sys->windows[i].height) > row && sys->windows[i].col <= col && (sys->windows[i].col + sys->windows[i].width) > col)
         {
-            sys->windows[topLevelId].id = sys->windows[i].id;
-            sys->windows[topLevelId].row = sys->windows[i].row;
-            sys->windows[topLevelId].col = sys->windows[i].col;
-            sys->windows[topLevelId].width = sys->windows[i].width;
-            sys->windows[topLevelId].height = sys->windows[i].height;
-            sys->windows[topLevelId].levelId = topLevelId;
-            sys->topLevelId++;
+            Window temp = sys->windows[i];
 
-            int id = sys->windows[i].id;
-            memset(&sys->windows[i], 0, sizeof(Window));
+            for (int j = i; j < sys->topLevelId - 1; j++)
+            {
+                sys->windows[j] = sys->windows[j + 1];
+            }
 
-            return id;
+            sys->windows[topLevelId - 1] = temp;
+            return sys->windows[topLevelId - 1].id;
         }
     }
     return -1;
@@ -165,8 +167,12 @@ int main()
     printf("Dispatch click event at (7, 7): %d\n", ret2);
     ret2 = MultiWindowSysDispatchClickEvent(sys, 7, 8);
     printf("Dispatch click event at (7, 8): %d\n", ret2);
-    ret2 = MultiWindowSysDispatchClickEvent(sys, 10, 7);//边界值
+    ret2 = MultiWindowSysDispatchClickEvent(sys, 10, 7); // 边界值
     printf("Dispatch click event at (10, 7): %d\n", ret2);
+
+    char ch = 'a';
+    int int_a = *(int *)&ch;
+    printf("%d\n", int_a);
 
     return 0;
 }
