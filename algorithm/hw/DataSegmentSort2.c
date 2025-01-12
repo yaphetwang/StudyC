@@ -16,7 +16,7 @@ struct DataSec
     char data[DATA_BUF_LEN];
 };
 
-void Recobine(struct DataSec *dataSec, int n, int dstType, char *outBuf, int outBufLen)
+void Recombine(struct DataSec *dataSec, int n, int dstType, char *outBuf, int outBufLen)
 {
     // 遍历前n个数据段即可
     struct DataSec dataTmp[MAX_N];
@@ -76,7 +76,7 @@ int main()
     scanf("%d", &dstType);
 
     static char outBuf[OUT_BUF_LEN];
-    Recobine(dataSec, n, dstType, outBuf, OUT_BUF_LEN);
+    Recombine(dataSec, n, dstType, outBuf, OUT_BUF_LEN);
     (void)printf("%s\n", outBuf);
     return 0;
 }

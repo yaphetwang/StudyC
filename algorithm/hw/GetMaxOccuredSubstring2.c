@@ -23,7 +23,7 @@ int cmp(const char *a, const char *b)
     return 0;
 }
 
-static char *getMaxOccuredSubstring(const char *inputStr)
+static char *getMaxOccurredSubstring(const char *inputStr)
 {
     StrCount *str_count = (StrCount *)malloc(sizeof(StrCount) * ARRAY_LEN);
     memset(str_count, 0, sizeof(StrCount) * ARRAY_LEN);
@@ -78,29 +78,30 @@ static char *getMaxOccuredSubstring(const char *inputStr)
     printf("maxCount:%d\n", maxCount);
 
     int count_i = 0;
-    int maxOccuredStrLen = count * 3 + count;
-    char *maxOccuredStr = (char *)malloc(maxOccuredStrLen);
-    memset(maxOccuredStr, 0, maxOccuredStrLen);
+    int maxOccurredStrLen = count * 3 + count;
+    char *maxOccurredStr = (char *)malloc(maxOccurredStrLen);
+    memset(maxOccurredStr, 0, maxOccurredStrLen);
     for (int i = 0; i < ARRAY_LEN; i++)
     {
         if (maxCount == str_count[i].count)
         {
             count_i++;
-            strcat(maxOccuredStr, str_count[i].str);
-            // strcat_s(maxOccuredStr, maxOccuredStrLen, str_count[i].str);
-            count_i < count ? strcat(maxOccuredStr, ",") : 0;
+            strcat(maxOccurredStr, str_count[i].str);
+            // strcat_s(maxOccurredStr, maxOccurredStrLen, str_count[i].str);
+            // count_i < count ? strcat(maxOccurredStr, ",") : 0;
+            strcat(maxOccurredStr, count_i < count ? "," : "");
         }
     }
 
-    return maxOccuredStr;
+    return maxOccurredStr;
 }
 
 int main()
 {
     char inputStr[] = "11212112";
     // scanf("%s", inputStr);
-    char *maxOccuredStr = getMaxOccuredSubstring(inputStr);
-    printf("%s\n", maxOccuredStr);
+    char *maxOccurredStr = getMaxOccurredSubstring(inputStr);
+    printf("%s\n", maxOccurredStr);
 
     // strstr函数用于在一个字符串中查找另一个字符串首次出现的位置。
     // 如果找到子字符串，则返回指向子字符串在原字符串中首次出现位置的指针；

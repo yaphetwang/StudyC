@@ -14,29 +14,9 @@
  * https://leetcode.cn/problems/wtcaE1/solutions/974092/jian-dan-yi-dong-javac-pythonjshua-dong-dtang/
  */
 
-int main()
+int max_no_repeat_sub_string(char *s, int len)
 {
-    int brr[1] = {5};
-    for (int right = 0; right < 5; right++)
-    {
-        brr[0]--;
-        printf("%d\n", brr[0]);
-    }
-    char a = 'a';
-    char z = 'z';
-    char A = 'A';
-    char Z = 'Z';
-    printf("a:%d\n", a);
-    printf("z:%d\n", z);
-    printf("A:%d\n", A);
-    printf("Z:%d\n", Z);
-
-    char s[] = "abcabcbb";
-    // char s[] = "pwwkew";
-
     int max = 0;
-    int len = strlen(s);
-    printf("len:%d\n", len);
     if (len == 0)
     {
         printf("%d\n", max);
@@ -47,14 +27,11 @@ int main()
     for (int left = 0, right = 0; right < len; right++)
     {
         char r = s[right];
-        // int index_r = r;
-        // printf("char:%c,index_r:%d\n", c, index_r);
         arr[r]++;
         while (arr[r] > 1)
         {
             // 说明存在重复的字符
             char l = s[left];
-            // int index_l = l;
             arr[l]--;
             left++;
         }
@@ -62,6 +39,53 @@ int main()
         // 记录长度
         max = max > right - left + 1 ? max : right - left + 1;
     }
+
+    return max;
+}
+
+int max_no_repeat_sub_string2(char *s, int len)
+{
+    int max = 0;
+    if (len == 0)
+    {
+        printf("%d\n", max);
+        return 0;
+    }
+
+    int arr[128] = {0};
+    int left = 0, right = 0;
+    while (right < len)
+    {
+        arr[s[right]]++;
+        while (arr[s[right]] > 1)
+        {
+            // 说明存在重复的字符,循环到一直把左边的重复字符移出去
+            arr[s[left]]--;
+            left++;
+        }
+        // 记录长度
+        max = max > right - left + 1 ? max : right - left + 1;
+        right++;
+    }
+
+    return max;
+}
+
+int main()
+{
+    char a = 'a';
+    char z = 'z';
+    char A = 'A';
+    char Z = 'Z';
+    printf("a:%d\n", a);
+    printf("z:%d\n", z);
+    printf("A:%d\n", A);
+    printf("Z:%d\n", Z);
+
+    char s[] = "abcabcbb";
+    char s1[] = "pwwkew";
+
+    int max = max_no_repeat_sub_string2(s, strlen(s));
 
     printf("%d\n", max);
 
