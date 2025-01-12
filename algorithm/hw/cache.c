@@ -25,6 +25,7 @@ static int QueryDb(int cacheSize, int *ids, int num)
     for (int i = 0; i < cacheSize; i++) {
         // cache[i].num = -1;
         // cache[i].nextPos = 0;
+        // cache[i] = {-1, 0};
         cache[i] = (NextPosStru)INIT_VAL;
     }
 

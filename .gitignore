@@ -57,3 +57,4 @@
 *.db22
 *.db23
 *.json
+.vscode/
