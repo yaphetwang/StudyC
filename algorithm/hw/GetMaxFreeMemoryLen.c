@@ -3,6 +3,10 @@
 #include <string.h>
 #include <stdbool.h>
 
+/*
+题目 找出来 贴一下
+*/
+
 // 穷举法
 int GetMaxFreeMemoryLen(char *memory, int cnt)
 {

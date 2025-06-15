@@ -7,6 +7,10 @@
 #define DATA_BUF_LEN 16
 #define OUT_BUF_LEN 512
 
+/*
+循环有链接条件的数据段， 直接遍历，直到找全 结束循环
+*/
+
 struct DataSec
 {
     int type;

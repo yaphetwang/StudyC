@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 // 一串数字，找出绝对值差为1的两个数的最大距离
+// 这个跟 下标有关， 还不能直接排序
 
 static int GetMaxDistance(const int *numbers, size_t numbersSize)
 {

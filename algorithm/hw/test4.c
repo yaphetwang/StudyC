@@ -294,6 +294,21 @@ int PhoneInfoDecode2(char *phoneInfo)
     return res;
 }
 
+void RevertStr(char *str)
+{
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++)
+    {
+        char temp = str[i];
+        str[i] = str[len - i - 1];
+        str[len - i - 1] = temp;
+    }
+}
+
+/*
+x@y=2x+y+3,x$y=3x+2*y+1,@优先级高于$
+103$104@105@2$106@107
+*/
 char *decodeCommon(char *phoneInfo, int len, char divide, int *size)
 {
     char *stack = (char *)malloc(len);
@@ -312,6 +327,7 @@ char *decodeCommon(char *phoneInfo, int len, char divide, int *size)
         {
             t_left[tl++] = stack[--top];
         }
+        // 翻转换上面的函数
         char left[CHAR_LEN] = {0};
         int l = 0;
         for (int t = tl - 1; t >= 0; t--)
@@ -344,7 +360,7 @@ char *decodeCommon(char *phoneInfo, int len, char divide, int *size)
         i = k - 1;
     }
     *size = top;
-    return stack; 
+    return stack;
 }
 
 int PhoneInfoDecode3(char *phoneInfo)

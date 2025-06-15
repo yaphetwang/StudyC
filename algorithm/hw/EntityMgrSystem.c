@@ -11,6 +11,8 @@ typedef struct
     int relationship[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE];
 } EntityMgrSystem;
 
+/* 二维数组 尽量不用要，多用struct 包一层 ，更简单容易理解 */
+
 static EntityMgrSystem *EntityMgrSystemCreate(int entityNum)
 {
     EntityMgrSystem *sys = (EntityMgrSystem *)malloc(sizeof(EntityMgrSystem) * entityNum);

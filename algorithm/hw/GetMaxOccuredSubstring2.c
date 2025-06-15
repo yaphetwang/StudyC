@@ -21,6 +21,7 @@ int cmp(const char *a, const char *b)
         }
     }
     return 0;
+    // 针对字符 可以使用 strcmp 函数来判断
 }
 
 static char *getMaxOccurredSubstring(const char *inputStr)

@@ -24,7 +24,9 @@ bool addAlarm(Alarm *alarms, int id, int *weekdays, int dayCount, int hour, int 
         return false;
     }
 
+    /* 使用闹钟ID做数组下标，好处是不需要遍历一遍了，可能会多使用一些内存*/
     alarms[id].id = id;
+    /* 内存cpy，如果是 char类型指针，可以使用strcpy */
     memcpy(alarms[id].weekdays, weekdays, dayCount * sizeof(int));
     alarms[id].hour = hour;
     alarms[id].minute = minute;

@@ -56,6 +56,7 @@ int proc2(int *arr, int arrLen, int diff)
         }
         else
         {
+            // 右值太大
             l++;
         }
     }
