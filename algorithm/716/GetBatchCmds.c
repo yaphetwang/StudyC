@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+/* 专线配置 */
+
 typedef struct
 {
     int id1;

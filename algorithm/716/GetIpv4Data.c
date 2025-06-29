@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+/* ip报文头解析， 考前看下 */
+
 #define B_LEN 8
 
 // 计算一个整数的二进制表示 整数范围 0-255
