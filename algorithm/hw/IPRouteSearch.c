@@ -86,7 +86,7 @@ char *getBinary(int num)
 {
     // malloc()函数分配一块内存，返回一个指针，指向这块内存的首地址, 也是有下标的
     char *b = (char *)malloc(sizeof(char) * B_LEN);
-    memset(b, '0', B_LEN);
+    memset(b, '0', sizeof(char) * B_LEN);
     // char tmp[B_LEN] = {'0'}; 一定要初始化，特别是数组不一定全部填充的情况
     int len = B_LEN;
     while (num != 0)
