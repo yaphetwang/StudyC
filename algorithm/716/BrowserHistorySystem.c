@@ -21,7 +21,7 @@ static BrowserHistorySys *BrowserHistorySysCreate(const char *homepage, int maxC
 {
     BrowserHistorySys *sys = (BrowserHistorySys *)malloc(sizeof(BrowserHistorySys));
     sys->maxCount = maxCount;
-    memset(sys->homepage, 0, URL_LEN);
+    memset(sys->homepage, 0, URL_LEN); // 定长声明的变量只需要初始化一下
     strcpy(sys->homepage, homepage);
     memset(sys->pages, 0, sizeof(sys->pages));
     strcpy(sys->pages[0], homepage);

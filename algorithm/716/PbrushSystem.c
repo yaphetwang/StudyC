@@ -5,11 +5,12 @@
 
 /*
 简易画图程序
-这个题要求重叠， 两条边重合 是没问题的
+图形 使用二维矩阵(二维数组) 来标注 每一个点， 是否重叠利用二维矩阵 来判断
 */
 
 #define RECTANGLE_NUM 100
 
+static int area[RECTANGLE_NUM][RECTANGLE_NUM] = {0};
 typedef struct
 {
     int row;
@@ -33,27 +34,67 @@ static PbrushSystem *PbrushSystemCreate(void)
 
 static bool PbrushSystemDrawRectangle(PbrushSystem *sys, int row, int col, int width, int height)
 {
-    if (row + height > 100 || col + width > 100)
+    // row,col 区间是 [0,99]
+    if (row >= RECTANGLE_NUM || col >= RECTANGLE_NUM)
     {
         return false;
     }
 
-    for (int i = 0; i < RECTANGLE_NUM; i++)
+    int temp[RECTANGLE_NUM][RECTANGLE_NUM] = {0};
+    int isAllValid = 1;
+
+    for (int r = row; r < row + height; r++)
     {
-        if (sys[i].row == -1)
+        for (int c = col; c < col + width; c++)
         {
-            continue;
+            if (r >= RECTANGLE_NUM || c >= RECTANGLE_NUM)
+            {
+                isAllValid = 0; // 超出边界
+                break;
+            }
+            if (area[r][c] == 1)
+            {
+                isAllValid = 0; // 有重叠
+                break;
+            }
+
+            temp[r][c] = 1;
         }
-
-        // 四个顶点有一个 落到 区域内 都算重叠
-        // printf("(%d,%d)", sys[i].row, sys[i].col);
-        // printf("(%d,%d)", sys[i].row, sys[i].col + sys[i].width);
-        // printf("(%d,%d)", sys[i].row + sys[i].height, sys[i].col);
-        // printf("(%d,%d)\n", sys[i].row + sys[i].height, sys[i].col + sys[i].width);
-
-        if (sys[i].row > row && sys[i].row < (row + height) && sys[i].col > col && sys[i].col < (col + width) || sys[i].row > row && sys[i].row < (row + height) && (sys[i].col + sys[i].width) > col && (sys[i].col + sys[i].width) < (col + width) || (sys[i].row + sys[i].height) > row && (sys[i].row + sys[i].height) < (row + height) && sys[i].col > col && sys[i].col < (col + width) || (sys[i].row + sys[i].height) > row && (sys[i].row + sys[i].height) < (row + height) && (sys[i].col + sys[i].width) > col && (sys[i].col + sys[i].width) < (col + width))
+        if (isAllValid == 0)
         {
-            return false;
+            break;
+        }
+    }
+    if (isAllValid == 0)
+    {
+        return false;
+    }
+
+    // for (int i = 0; i < RECTANGLE_NUM; i++)
+    // {
+    //     if (sys[i].row == -1)
+    //     {
+    //         continue;
+    //     }
+    //     // 四个顶点有一个 落到 区域内 都算重叠,  这样判断不行
+    //     // printf("(%d,%d)", sys[i].row, sys[i].col);
+    //     // printf("(%d,%d)", sys[i].row, sys[i].col + sys[i].width);
+    //     // printf("(%d,%d)", sys[i].row + sys[i].height, sys[i].col);
+    //     // printf("(%d,%d)\n", sys[i].row + sys[i].height, sys[i].col + sys[i].width);
+    //     if (sys[i].row > row && sys[i].row < (row + height) && sys[i].col > col && sys[i].col < (col + width) || sys[i].row > row && sys[i].row < (row + height) && (sys[i].col + sys[i].width) > col && (sys[i].col + sys[i].width) < (col + width) || (sys[i].row + sys[i].height) > row && (sys[i].row + sys[i].height) < (row + height) && sys[i].col > col && sys[i].col < (col + width) || (sys[i].row + sys[i].height) > row && (sys[i].row + sys[i].height) < (row + height) && (sys[i].col + sys[i].width) > col && (sys[i].col + sys[i].width) < (col + width))
+    //     {
+    //         return false;
+    //     }
+    // }
+
+    for (int r = row; r < row + height; r++)
+    {
+        for (int c = col; c < col + width; c++)
+        {
+            if (temp[r][c])
+            {
+                area[r][c] = 1;
+            }
         }
     }
 
@@ -72,21 +113,62 @@ static bool PbrushSystemDrawRectangle(PbrushSystem *sys, int row, int col, int w
     return true;
 }
 
-static int PbrushSystemEraseArea(PbrushSystem *sys, int row, int col, int width, int height)
+static void SearchArea(PbrushSystem *sys, int curRow, int curCol)
 {
-    int cnt = 0;
     for (int i = 0; i < RECTANGLE_NUM; i++)
     {
         if (sys[i].row == -1)
         {
             continue;
         }
-        if (sys[i].row > row && sys[i].row < (row + height) && sys[i].col > col && sys[i].col < (col + width) || sys[i].row > row && sys[i].row < (row + height) && (sys[i].col + sys[i].width) > col && (sys[i].col + sys[i].width) < (col + width) || (sys[i].row + sys[i].height) > row && (sys[i].row + sys[i].height) < (row + height) && sys[i].col > col && sys[i].col < (col + width) || (sys[i].row + sys[i].height) > row && (sys[i].row + sys[i].height) < (row + height) && (sys[i].col + sys[i].width) > col && (sys[i].col + sys[i].width) < (col + width))
+
+        //  范围以 左上角顶点 来判断 左闭右开 [0,1)
+        if (curRow < sys[i].row || curRow >= sys[i].row + sys[i].height)
         {
-            sys[i].row = -1;
-            sys[i].col = -1;
-            sys[i].width = -1;
-            sys[i].height = -1;
+            continue;
+        }
+
+        if (curCol < sys[i].col || curCol >= sys[i].col + sys[i].width)
+        {
+            continue;
+        }
+
+        // 找到一个图形区域 即可， 后面还有其他点 来匹配其他图形，直到匹配完所有重叠的
+        for (int r = sys[i].row; r < sys[i].row + sys[i].height; r++)
+        {
+            for (int c = sys[i].col; c < sys[i].col + sys[i].width; c++)
+            {
+                area[r][c] = 0;
+            }
+        }
+
+        // 先清理area 再重新初始化
+        sys[i].row = -1;
+        sys[i].col = -1;
+        sys[i].height = -1;
+        sys[i].width = -1;
+    }
+}
+
+static int PbrushSystemEraseArea(PbrushSystem *sys, int row, int col, int width, int height)
+{
+    int cnt = 0;
+    for (int r = row; r < row + height; r++)
+    {
+        for (int c = col; c < col + width; c++)
+        {
+            if (r >= RECTANGLE_NUM || c >= RECTANGLE_NUM)
+            {
+                continue;
+            }
+
+            if (area[r][c] == 0)
+            {
+                continue;
+            }
+
+            // 有一个点重叠, 找 这个点 出现在哪个图形 区域里
+            SearchArea(sys, r, c);
             cnt++;
         }
     }
@@ -97,7 +179,7 @@ static int PbrushSystemEraseArea(PbrushSystem *sys, int row, int col, int width,
 static int PbrushSystemQueryArea(PbrushSystem *sys)
 {
     int height = 0, width = 0;
-    int min_row = 100, max_row = 0, min_col = 100, max_col = 0;
+    int min_row = RECTANGLE_NUM, max_row = 0, min_col = RECTANGLE_NUM, max_col = 0;
     int is_has = 0;
     for (int i = 0; i < RECTANGLE_NUM; i++)
     {

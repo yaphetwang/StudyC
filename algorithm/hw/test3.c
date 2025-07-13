@@ -194,7 +194,7 @@ static int *MatchLogTrait3(const int *events, size_t eventsSize, const int *trai
 }
 
 /*
-直接遍历原始序列，先记录匹配特征序列第一个元素的位置， 遍历起始位置去匹配
+直接遍历原始序列，先记录匹配到 特征序列第一个元素的位置， 遍历起始位置 去匹配
 */
 static int *MatchLogTrait4(const int *events, size_t eventsSize, const int *traits, size_t traitsSize, size_t *returnSize)
 {

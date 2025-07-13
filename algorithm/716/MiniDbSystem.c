@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-/* SQL解析执行，简易数据库系统 */
+/* SQL解析执行，简易数据库系统， 每个表列数 不是固定的， 主键keys个数不是固定的 */
 
 #define TABLE_ID_NUM 10001
 #define TABLE_DATA_CNT 1000
@@ -13,7 +13,7 @@ typedef struct
     int tableId;
     int colNum;
     char *keys;
-    int *values[TABLE_DATA_CNT]; // 指针数组，数组里面每个指针指向对应行
+    int *values[TABLE_DATA_CNT]; // 指针数组，数组里面每个指针 指向 对应行
     int valuesId;                // values 下标
 } Table;
 
@@ -52,7 +52,7 @@ static void MiniDbCreate(MiniDb *sys, int tableId, int colNum, const char *keys)
     sys->tables[tableId].keys = (char *)malloc(sizeof(char) * keysLen);
     strcpy(sys->tables[tableId].keys, keys);
     printf("keys:%s\n", sys->tables[tableId].keys);
-    memset(sys->tables[tableId].values, 0, sizeof(int *) * TABLE_DATA_CNT);
+    memset(sys->tables[tableId].values, 0, sizeof(int *) * TABLE_DATA_CNT); // 每个表的数据最多1000行，先分配好内存
     sys->tables[tableId].valuesId = 0;
 }
 
@@ -63,6 +63,7 @@ static void MiniDbInsert(MiniDb *sys, int tableId, const int *values, size_t val
     int keysLen = strlen(table.keys);
     int valuesId = table.valuesId;
     int keyConf = 0;
+    // 使用 valuesId 来遍历实际添加的
     for (int i = 0; i < valuesId; i++)
     {
         // 每一行 判断 是否 主键冲突
@@ -107,7 +108,7 @@ static void MiniDbInsert(MiniDb *sys, int tableId, const int *values, size_t val
 
 typedef struct
 {
-    int *cols;
+    int *cols; // 不固定长度，使用时 动态分配内存
     int colsSize;
 } CmpCol;
 

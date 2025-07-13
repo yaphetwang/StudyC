@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/* 专线配置 */
+/* 专线配置，这种 标识 一个点 的类型题， 特别适合 二维矩阵（二维数组来做） */
 
 typedef struct
 {
@@ -129,6 +129,7 @@ static Cmd *GetBatchCmds(const Config *configs, size_t configsSize, const Cmd *b
     return res;
 }
 
+/* 还是用 二维矩阵 是正解*/
 #define ID_LEN 101
 static int g_initMap[ID_LEN][ID_LEN] = {0};
 static int g_cmdMap[ID_LEN][ID_LEN] = {0};
@@ -200,7 +201,7 @@ static Cmd *GetBatchCmds2(const Config *configs, size_t configsSize, const Cmd *
         }
     }
 
-    // 统计新增的
+    // 后统计新增的
     for (int i = 0; i < ID_LEN; i++)
     {
         for (int j = 0; j < ID_LEN; j++)

@@ -1,20 +1,23 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-
 static int GetWordsCnt(char **lines, size_t linesSize)
 {
     int cnt = 0;
     char *temp = (char *)malloc(2000);
     memset_s(temp, 2000, 0, 2000);
     int idx = 0;
-    for (int i = 0; i < linesSize; i++) {
+    for (int i = 0; i < linesSize; i++)
+    {
         int len = strlen(lines[i]);
-        for (int j = 0; j < len; j++) {
-            if (lines[i][j] != '\0') {
+        for (int j = 0; j < len; j++)
+        {
+            if (lines[i][j] != '\0')
+            {
                 temp[idx++] = lines[i][j];
             }
-            if (j == len - 1 && lines[i][j] != '-') {
+            if (j == len - 1 && lines[i][j] != '-')
+            {
                 temp[idx++] = ',';
             }
         }
@@ -23,31 +26,43 @@ static int GetWordsCnt(char **lines, size_t linesSize)
     printf("temp:%s\n", temp);
 
     bool start = false;
-    for (int i = 0; i < 2000; i++) {
-        if (!start && islower(temp[i])) {
+    for (int i = 0; i < 2000; i++)
+    {
+        if (!start && islower(temp[i]))
+        {
             start = true;
         }
 
-        if (temp[i] == '-') {
+        if (temp[i] == '-')
+        {
             continue;
         }
 
-        if (start && temp[i] == '\0') {
+        if (start && temp[i] == '\0')
+        {
             cnt++;
             break;
         }
 
-        if (temp[i] == '\0') {
+        if (temp[i] == '\0')
+        {
             break;
         }
 
-        if (start && !islower(temp[i])) {
+        if (start && !islower(temp[i]))
+        {
             cnt++;
             start = false;
         }
     }
 
     return cnt;
+}
+
+/* 重新写一次， 只需要将连接符 - 处理下， 然后 strtok 分割下 */
+static int GetWordsCnt2(char **lines, size_t linesSize)
+{
+    return 0;
 }
 
 int main(void)

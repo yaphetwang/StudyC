@@ -13,7 +13,7 @@ typedef struct
     int time;
     int videoType;
     int useVideoType;
-    int isFree;
+    int isOccupy;
 } Allocate;
 
 typedef struct
@@ -54,7 +54,7 @@ static int VideoServiceFreeChannel(VideoService *sys, int time, int userId)
 
 static int VideoServiceQueryChannel(VideoService *sys, int userId)
 {
-    if (sys->allocates[userId].isFree)
+    if (sys->allocates[userId].isOccupy)
     {
         return sys->allocates[userId].useVideoType;
     }

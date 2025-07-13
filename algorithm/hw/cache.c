@@ -7,8 +7,7 @@
 
 #define INIT_VAL \
     {            \
-        -1, 0    \
-    }
+        -1, 0}
 
 typedef struct
 {
@@ -22,19 +21,23 @@ static int QueryDb(int cacheSize, int *ids, int num)
 
     // 缓存数组初始化
     NextPosStru cache[cacheSize];
-    for (int i = 0; i < cacheSize; i++) {
+    for (int i = 0; i < cacheSize; i++)
+    {
         // cache[i].num = -1;
         // cache[i].nextPos = 0;
         // cache[i] = {-1, 0};
         cache[i] = (NextPosStru)INIT_VAL;
     }
 
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < num; i++)
+    {
         int id = ids[i];
-        int nextPos = num;  // 初始化为num，这里的nextPos是下一个出现的位置
-        for (int j = i + 1; j < num; j++) {
+        int nextPos = num; // 初始化为num，这里的nextPos是下一个出现的位置
+        for (int j = i + 1; j < num; j++)
+        {
             // 找下一个出现的位置
-            if (ids[j] == id) {
+            if (ids[j] == id)
+            {
                 nextPos = j;
                 break;
             }
@@ -42,24 +45,31 @@ static int QueryDb(int cacheSize, int *ids, int num)
 
         // 检查缓存
         bool isHit = false;
-        for (int k = 0; k < cacheSize; k++) {
-            if (cache[k].num == id) {
+        for (int k = 0; k < cacheSize; k++)
+        {
+            if (cache[k].num == id)
+            {
                 // 命中缓存，更新下一个位置
                 cache[k].nextPos = nextPos;
                 isHit = true;
                 break;
             }
         }
-        if (isHit) {
+        if (isHit)
+        {
             continue;
-        } else {
+        }
+        else
+        {
             // 未命中缓存，需要查询数据库
             db_cnt += 1;
             // 放入缓存中
             int index = 0, maxPos = 0;
             bool setRet = false;
-            for (int l = 0; l < cacheSize; l++) {
-                if (cache[l].num == -1) {
+            for (int l = 0; l < cacheSize; l++)
+            {
+                if (cache[l].num == -1)
+                {
                     // 找到空位置
                     cache[l].num = id;
                     cache[l].nextPos = nextPos;
@@ -67,13 +77,15 @@ static int QueryDb(int cacheSize, int *ids, int num)
                     break;
                 }
 
-                if (cache[l].nextPos > maxPos) {
+                if (cache[l].nextPos > maxPos)
+                {
                     index = l;
                     maxPos = cache[l].nextPos;
                 }
             }
             // 更新缓存,替换缓存数据,下一次出现位置最大的替换掉
-            if (!setRet) {
+            if (!setRet)
+            {
                 cache[index].num = id;
                 cache[index].nextPos = nextPos;
             }
@@ -105,7 +117,7 @@ int main()
         }
     }
 
-   int ret = QueryDb(cacheSize, ids, num);
+    int ret = QueryDb(cacheSize, ids, num);
     printf("%d\n", ret);
     return 0;
 }
